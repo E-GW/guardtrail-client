@@ -4,7 +4,7 @@ import { createReport } from '../api';
 const CONDITION_TYPES = [
   { value: 'ice_snow', label: 'Ice / Snow' },
   { value: 'flooding', label: 'Flooding' },
-  { value: 'blowdown', label: 'Blowdown' },
+  { value: 'blowdown', label: 'Tree blowdown' },
   { value: 'washout', label: 'Washout' },
   { value: 'closure', label: 'Closure' },
   { value: 'other', label: 'Other' },
@@ -135,7 +135,7 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <div style={{ fontSize: 12, color: '#888' }}>
+                  <div style={{ fontSize: 13, color: '#171717' }}>
                     Close this form and click the map to place a pin, or enter coordinates manually:
                   </div>
                   <div style={{ display: 'flex', gap: 8 }}>
