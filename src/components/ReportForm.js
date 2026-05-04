@@ -1,6 +1,12 @@
+// ReportForm.js
+// Modal form for submitting a new trail condition report.
+// Opens when a user clicks the map (coordinates pre-filled) or clicks
+// the "+ Report Condition" button (coordinates entered manually).
+
 import React, { useState } from 'react';
 import { createReport } from '../api';
 
+// Valid condition types that match the CHECK constraint in the database
 const CONDITION_TYPES = [
   { value: 'ice_snow', label: 'Ice / Snow' },
   { value: 'flooding', label: 'Flooding' },
@@ -10,28 +16,37 @@ const CONDITION_TYPES = [
   { value: 'other', label: 'Other' },
 ];
 
+// Severity levels — stored in the database and used for color coding markers
 const SEVERITIES = [
   { value: 'low', label: 'Low' },
   { value: 'moderate', label: 'Moderate' },
   { value: 'high', label: 'High' },
 ];
 
+// Props:
+//   onClose — called when the user cancels or the form is dismissed
+//   onSuccess — called after a successful submission to refresh the map
+//   defaultLat / defaultLng — coordinates from the map click, pre-fills location
 export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng }) {
   const [form, setForm] = useState({
     trail_name: '',
     condition_type: 'ice_snow',
     severity: 'moderate',
     description: '',
-    lat: defaultLat || '',
+    lat: defaultLat || '',  // Pre-filled if user clicked the map
     lng: defaultLng || '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Generic field updater — keeps form state immutable by spreading previous state
   function set(field, value) {
     setForm(prev => ({ ...prev, [field]: value }));
   }
 
+  // Validates required fields, then POSTs to the API.
+  // The API requires a valid JWT token in the Authorization header —
+  // the axios interceptor in api.js handles attaching it automatically.
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
@@ -42,7 +57,7 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
     setLoading(true);
     try {
       await createReport(form);
-      onSuccess();
+      onSuccess(); // Trigger map refresh in the parent
       onClose();
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to submit report. Are you signed in?');
@@ -51,6 +66,8 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
     }
   }
 
+  // Uses the browser Geolocation API to fill in the user's current coordinates.
+  // Useful on mobile when the user is physically at the location being reported.
   function useMyLocation() {
     if (!navigator.geolocation) return setError('Geolocation not supported by your browser.');
     navigator.geolocation.getCurrentPosition(
@@ -69,14 +86,18 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
           <span>Submit a trail report</span>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
+
         <form onSubmit={handleSubmit}>
           <div className="modal-body">
+
+            {/* Trail name — free text, required */}
             <div className="form-group">
               <label className="form-label">Trail name *</label>
               <input className="form-input" placeholder="e.g. Eagle Peak Trail"
                 value={form.trail_name} onChange={e => set('trail_name', e.target.value)} required />
             </div>
 
+            {/* Condition type and severity — displayed side by side */}
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Condition type *</label>
@@ -98,6 +119,7 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
               </div>
             </div>
 
+            {/* Optional free-text description */}
             <div className="form-group">
               <label className="form-label">Description</label>
               <textarea className="form-textarea"
@@ -105,9 +127,12 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
                 value={form.description} onChange={e => set('description', e.target.value)} />
             </div>
 
+            {/* Location field — shows a confirmation badge if coordinates are set,
+                or manual entry inputs + "use my location" button if not */}
             <div className="form-group">
               <label className="form-label">Location *</label>
               {form.lat && form.lng ? (
+                // Coordinates already set — show confirmation with option to clear
                 <div style={{
                   padding: '9px 11px',
                   background: '#e6f1fb',
@@ -134,6 +159,7 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
                   </button>
                 </div>
               ) : (
+                // No coordinates yet — show manual entry and GPS button
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <div style={{ fontSize: 13, color: '#171717' }}>
                     Close this form and click the map to place a pin, or enter coordinates manually:
@@ -154,6 +180,7 @@ export default function ReportForm({ onClose, onSuccess, defaultLat, defaultLng 
 
             {error && <div className="form-error">{error}</div>}
           </div>
+
           <div className="modal-footer">
             <button type="button" className="btn" onClick={onClose}>Cancel</button>
             <button type="submit" className="btn btn-primary" disabled={loading}>

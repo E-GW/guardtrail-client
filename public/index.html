@@ -1,43 +1,51 @@
+<!-- index.html -->
+<!-- The single HTML file that React mounts into. During the build process,
+     React injects the compiled JavaScript bundle into the <body> tag.
+     The app renders inside the <div id="root"> element. -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+
+    <!-- App icon shown in the browser tab -->
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+    <!-- Ensures the app scales correctly on mobile devices and doesn't
+         allow the browser to zoom in on input fields -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Sets the browser chrome color on mobile (Android) -->
     <meta name="theme-color" content="#000000" />
+
+    <!-- Description shown in search engine results and link previews -->
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="GuardTrail — crowdsourced trail condition reporting for hikers and land managers."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <!-- Icon shown when the app is saved to an iOS home screen -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+    <!-- Web app manifest — defines app name, icons, and display settings
+         used when installed as a Progressive Web App (PWA) on mobile -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- %PUBLIC_URL% is replaced with the correct base URL at build time,
+         ensuring paths work correctly whether hosted at the root or a subdirectory -->
+
     <title>GuardTrail</title>
   </head>
   <body>
+
+    <!-- Fallback message for browsers with JavaScript disabled -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- React mounts the entire application here at runtime.
+         Everything you see in the app is injected into this single div. -->
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <!-- The compiled JavaScript bundle is automatically injected here
+         by the React build process — do not add script tags manually. -->
   </body>
 </html>

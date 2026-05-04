@@ -1,3 +1,10 @@
+/* index.css */
+/* Global styles for the GuardTrail application.
+   Organized by layout layer: base → layout → components → mobile. */
+
+/* ── Reset ── */
+/* Removes default browser margin and padding, and sets box-sizing to border-box
+   so padding and borders are included in element width/height calculations */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,13 +17,16 @@ body {
   color: #1a1a1a;
   background: #f5f5f5;
 }
- 
+
+/* Leaflet requires an explicit size on its container element or the map won't render */
 .leaflet-container {
   width: 100%;
   height: 100%;
 }
 
 /* ── Overall layout ── */
+/* Uses flexbox column to stack title bar → toolbar → content → footer.
+   height: 100vh locks the app to the viewport so nothing scrolls at the page level. */
 .app-wrapper {
   display: flex;
   flex-direction: column;
@@ -25,6 +35,7 @@ body {
 }
 
 /* ── Title bar ── */
+/* Full-width dark blue header spanning the top of the page */
 .title-bar {
   background: #1f4e79;
   color: #fff;
@@ -33,18 +44,21 @@ body {
   font-size: 32px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Prevents the title bar from shrinking when space is tight */
 }
 
-/* ── Second row: sidebar header + map toolbar ── */
+/* ── Toolbar row ── */
+/* Second row below the title bar containing the sidebar label,
+   info button, role badge, and action buttons */
 .toolbar-row {
   display: flex;
   align-items: center;
   background: #fff;
-  border-bottom: 1px solid #e0e0e0; 
+  border-bottom: 1px solid #e0e0e0;
   flex-shrink: 0;
 }
 
+/* Label above the sidebar — matches the sidebar width exactly */
 .toolbar-sidebar-label {
   width: 300px;
   flex-shrink: 0;
@@ -54,6 +68,7 @@ body {
   border-right: 1px solid #e0e0e0;
 }
 
+/* Right side of the toolbar — pushes buttons to the far right */
 .toolbar-map-actions {
   flex: 1;
   display: flex;
@@ -63,6 +78,8 @@ body {
 }
 
 /* ── Main content row ── */
+/* Fills all remaining vertical space between the toolbar and footer.
+   overflow: hidden prevents the sidebar or map from growing past the viewport. */
 .main-content {
   display: flex;
   flex: 1;
@@ -70,6 +87,7 @@ body {
 }
 
 /* ── Sidebar ── */
+/* Fixed-width panel on the left showing search, filters, and the report list */
 .sidebar {
   width: 300px;
   background: #fff;
@@ -83,10 +101,10 @@ body {
 .sidebar-search {
   padding: 10px 14px;
   border-bottom: 1px solid #e0e0e0;
-} 
+}
 
 .sidebar-filters {
-  padding: 8px 14px; 
+  padding: 8px 14px;
   border-bottom: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
@@ -104,7 +122,7 @@ body {
 
 .filter-chips {
   display: flex;
-  gap: 6px; 
+  gap: 6px;
   flex-wrap: wrap;
 }
 
@@ -118,6 +136,7 @@ body {
   border-bottom: 1px solid #f0f0f0;
 }
 
+/* Scrollable report list — flex: 1 lets it grow to fill remaining sidebar space */
 .report-list {
   overflow-y: auto;
   flex: 1;
@@ -133,6 +152,7 @@ body {
   background: #f8fbff;
 }
 
+/* Blue left border highlights the currently selected report */
 .report-item.selected {
   background: #e6f1fb;
   border-left: 3px solid #1f4e79;
@@ -146,7 +166,7 @@ body {
 }
 
 .report-item-title {
-  font-weight: 500; 
+  font-weight: 500;
   font-size: 14px;
   flex: 1;
 }
@@ -165,6 +185,9 @@ body {
 }
 
 /* ── Map area ── */
+/* Fills all remaining horizontal space to the right of the sidebar.
+   position: relative is required for absolute-positioned children
+   like the legend and the instruction banner to position correctly. */
 .map-wrapper {
   flex: 1;
   position: relative;
@@ -172,6 +195,9 @@ body {
 }
 
 /* ── Legend ── */
+/* Absolute positioned in the bottom-right corner of the map.
+   z-index: 1000 places it above Leaflet tile layers (z-index ~400)
+   but below modals (z-index 2000). */
 .map-legend {
   position: absolute;
   bottom: 28px;
@@ -212,6 +238,9 @@ body {
 }
 
 /* ── Map instruction banner ── */
+/* Centered floating label above the map.
+   pointer-events: none allows map clicks to pass through it.
+   white-space: nowrap keeps it on one line on desktop. */
 .map-banner {
   position: absolute;
   top: 12px;
@@ -227,7 +256,8 @@ body {
   white-space: nowrap;
 }
 
-/* ── Report detail in sidebar ── */
+/* ── Inline report detail (sidebar) ── */
+/* Expands below the selected report item in the sidebar list */
 .detail-section {
   padding: 12px 14px;
   border-bottom: 1px solid #f0f0f0;
@@ -249,7 +279,7 @@ body {
 
 .detail-description {
   font-size: 12px;
-  color: #444; 
+  color: #444;
   line-height: 1.5;
   margin-bottom: 8px;
 }
@@ -281,7 +311,7 @@ body {
   background: #fff;
   cursor: pointer;
   font-size: 13px;
-  min-height: 44px;
+  min-height: 44px; /* 44px minimum touch target for mobile accessibility */
 }
 
 .btn-primary {
@@ -298,27 +328,28 @@ body {
   border-color: #c94040;
 }
 
+/* Compact button variant used inside sidebars and detail panels */
 .btn-sm {
   padding: 5px 10px;
   min-height: 34px;
   font-size: 12px;
 }
 
-/* ── Badge ── */
+/* ── Severity badges ── */
 .badge {
   display: inline-block;
   padding: 2px 7px;
   border-radius: 10px;
   font-size: 10px;
   font-weight: 500;
-} 
+}
 
-.badge-high { background: #fcebeb; color: #a32d2d; }
+.badge-high     { background: #fcebeb; color: #a32d2d; }
 .badge-moderate { background: #faeeda; color: #854f0b; }
-.badge-low { background: #e6f1fb; color: #185fa5; }
+.badge-low      { background: #e6f1fb; color: #185fa5; }
 .badge-resolved { background: #e8f5e9; color: #2e7d32; }
 
-/* ── Chip ── */
+/* ── Filter chips ── */
 .chip {
   padding: 4px 10px;
   border-radius: 20px;
@@ -329,13 +360,15 @@ body {
   min-height: 30px;
 }
 
+/* Active chip highlighted in blue when its filter is selected */
 .chip.active {
   background: #e6f1fb;
   border-color: #2e75b6;
   color: #185fa5;
 }
 
-/* ── Modal ── */
+/* ── Modal overlay and dialog ── */
+/* Semi-transparent backdrop covers the full viewport behind the modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -343,15 +376,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 2000; /* Above everything else including the legend and map banner */
 }
 
 .modal {
   background: #fff;
   border-radius: 12px;
   width: 420px;
-  max-width: 95vw;
-  max-height: 90vh;
+  max-width: 95vw;   /* Prevents overflow on small screens */
+  max-height: 90vh;  /* Allows the modal to scroll if content is tall */
   overflow-y: auto;
   box-shadow: 0 8px 32px rgba(0,0,0,0.18);
 }
@@ -390,7 +423,7 @@ body {
   gap: 8px;
 }
 
-/* ── Form ── */
+/* ── Form elements ── */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -403,6 +436,7 @@ body {
   color: #555;
 }
 
+/* Shared styles for all text inputs, selects, and textareas */
 .form-input,
 .form-select,
 .form-textarea {
@@ -420,6 +454,7 @@ body {
   min-height: 80px;
 }
 
+/* Two-column form row for side-by-side inputs (e.g. type and severity) */
 .form-row {
   display: flex;
   gap: 12px;
@@ -432,7 +467,8 @@ body {
   font-size: 12px;
 }
 
-/* ── Auth ── */
+/* ── Auth screen ── */
+/* Centered card layout used for sign-in, sign-up, and confirmation screens */
 .auth-wrapper {
   display: flex;
   align-items: center;
@@ -475,7 +511,8 @@ body {
   font-weight: 600;
 }
 
-/* ── Role badge ── */
+/* ── Role badge in toolbar ── */
+/* Blue for regular hikers, green for land managers */
 .role-badge {
   font-size: 12px;
   padding: 4px 10px;
@@ -489,16 +526,23 @@ body {
   background: #e8f5e9;
   color: #2e7d32;
   border-color: #a5d6a7;
-} 
+}
 
-/* ── Mobile ── */
+/* ── Mobile styles ── */
+/* Applied on screens narrower than 768px (phones and small tablets) */
 @media (max-width: 768px) {
+
+  /* Hide desktop sidebar — replaced by MobileBottomSheet */
   .sidebar { display: none; }
+
+  /* Hide "Trail Reports" label in toolbar since there's no sidebar on mobile */
   .toolbar-sidebar-label { display: none; }
 
-  /* ── Mobile bottom sheet ── */
+  /* Mobile bottom sheet — slides up from the bottom of the screen.
+     Can be expanded (shows report list) or collapsed (slim bar only).
+     Height is controlled dynamically via inline style in MobileBottomSheet.js */
   .mobile-bottom-sheet {
-    display: none;
+    display: flex;
     flex-direction: column;
     position: fixed;
     bottom: 0;
@@ -508,10 +552,11 @@ body {
     border-radius: 16px 16px 0 0;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
     z-index: 1500;
-    transition: height 0.3s ease;
+    transition: height 0.3s ease; /* Smooth animation when collapsing/expanding */
     overflow: hidden;
   }
 
+  /* Drag handle — visual affordance indicating the sheet can be toggled */
   .sheet-handle-bar {
     width: 40px;
     height: 4px;
@@ -522,6 +567,7 @@ body {
     cursor: grab;
   }
 
+  /* Toggle button showing report count and expand/collapse indicator */
   .sheet-toggle-btn {
     background: none;
     border: none;
@@ -534,42 +580,35 @@ body {
     flex-shrink: 0;
   }
 
+  /* Scrollable area inside the expanded sheet */
   .sheet-content {
     overflow-y: auto;
     flex: 1;
-    padding: 0 0 80px 0;
+    padding: 0 0 80px 0; /* Bottom padding prevents content hiding behind sheet edge */
   }
 
+  /* Search bar at the top of the expanded mobile sheet */
   .sheet-search {
     padding: 8px 12px;
     border-bottom: 1px solid #f0f0f0;
     flex-shrink: 0;
   }
 
-  /* Two-line map banner for mobile */
-  @media (max-width: 768px) {
-    .mobile-bottom-sheet {
-      display: flex;
-    }
-
-    .map-banner {
-      white-space: normal;
-      text-align: center;
-      max-width: 200px;
-      left: 55px;
-      transform: none;
-      font-size: 12px;
-      line-height: 1.4;
-      padding: 6px 12px;
-    }
+  /* On mobile, the instruction banner wraps to two lines and shifts right
+     to avoid overlapping the Leaflet zoom +/- buttons in the top-left corner */
+  .map-banner {
+    white-space: normal;
+    text-align: center;
+    max-width: 200px;
+    left: 55px;
+    transform: none;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 6px 12px;
   }
+}
 
-  @media (min-width: 769px) {
-    .mobile-bottom-sheet { display: none !important; }
-  }
-} 
-
+/* Ensure bottom sheet stays hidden on desktop */
 @media (min-width: 769px) {
-  .mobile-bottom-sheet { display: none; }
-  .mobile-fab { display: none !important; }
-} 
+  .mobile-bottom-sheet { display: none !important; }
+}
